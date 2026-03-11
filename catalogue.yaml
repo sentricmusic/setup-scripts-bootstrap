@@ -6,23 +6,23 @@ schema_version: "1.0"
 
 service:
   name: "setup-scripts-bootstrap"
-  type: "web-application"
-  language: "PowerShell"
+  type: "cli-tool"
+  language: "PowerShell,Bash"
   framework: ""
-  repository: ""
+  repository: "https://github.com/sentricmusic/setup-scripts-bootstrap"
 
 ownership:
   # TODO: Fill these in and approve the PR
   technical_lead: ""
   product_owner: ""
-  business_stakeholder: ""
-  squad: ""
+  business_stakeholder: "All"
+  squad: "Platform"
 
 infrastructure:
-  host_type: "ECS-Docker"
+  host_type: "NotApplicable"
   data_sources: []
-  aws_account: "production"
-  region: "eu-west-1"
+  aws_account: "NotApplicable"
+  region: "NotApplicable"
 
 dependencies: []
 last_synced: ""
