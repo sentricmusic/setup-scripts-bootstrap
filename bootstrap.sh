@@ -231,10 +231,11 @@ main() {
         write_warning "Not authenticated with GitHub"
         echo ""
         echo -e "  ${YELLOW}Please authenticate with your GitHub account.${NC}"
-        echo -e "  ${YELLOW}A browser window will open for authentication.${NC}"
+        echo -e "  ${YELLOW}GitHub.com, SSH, and browser login will be preselected.${NC}"
+        echo -e "  ${YELLOW}GitHub CLI will still guide SSH key selection or generation if needed.${NC}"
         echo ""
         
-        gh auth login --web --git-protocol https
+        gh auth login --hostname github.com --git-protocol ssh --web
         
         if check_github_auth; then
             write_success "Successfully authenticated with GitHub"
