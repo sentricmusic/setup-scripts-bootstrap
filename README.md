@@ -92,7 +92,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 If GitHub authentication fails, try manually:
 
 ```bash
-gh auth login
+gh auth login --hostname github.com --git-protocol ssh --web
 ```
 
 Then run the bootstrap script again.

@@ -236,10 +236,11 @@ function Main {
         Write-Warning "Not authenticated with GitHub"
         Write-Host ""
         Write-Host "  Please authenticate with your GitHub account." -ForegroundColor Yellow
-        Write-Host "  A browser window will open for authentication." -ForegroundColor Yellow
+        Write-Host "  GitHub.com, SSH, and browser login will be preselected." -ForegroundColor Yellow
+        Write-Host "  GitHub CLI will still guide SSH key selection or generation if needed." -ForegroundColor Yellow
         Write-Host ""
 
-        gh auth login --web --git-protocol https
+        gh auth login --hostname github.com --git-protocol ssh --web
 
         if (Test-GitHubAuth) {
             Write-Success "Successfully authenticated with GitHub"
