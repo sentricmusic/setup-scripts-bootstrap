@@ -87,17 +87,51 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+install_homebrew() {
+    write_status "Installing Homebrew (this can take a few minutes)..."
+    # Official non-interactive installer.
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Make brew available in the current session (Apple Silicon vs Intel paths).
+    if [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
+ensure_git() {
+    # Git is required for `gh repo clone`; on macOS it is not present by default.
+    if command_exists git; then
+        return
+    fi
+    write_warning "Git is not installed"
+    if [[ "$OSTYPE" == "darwin"* ]] && command_exists brew; then
+        write_status "Installing Git..."
+        brew install git
+    fi
+    if ! command_exists git; then
+        write_error "Git is required to clone repositories. Please install it and re-run."
+        exit 1
+    fi
+}
+
 install_github_cli() {
     write_status "Installing GitHub CLI..."
-    
+
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        if command_exists brew; then
-            brew install gh
-        else
-            write_error "Homebrew is not available. Please install GitHub CLI manually from https://cli.github.com/"
+        # macOS — ensure Homebrew exists first, bootstrapping it when missing.
+        if ! command_exists brew; then
+            write_warning "Homebrew is not installed"
+            install_homebrew
+        fi
+
+        if ! command_exists brew; then
+            write_error "Homebrew installation failed. Please install it from https://brew.sh and re-run."
             exit 1
         fi
+
+        brew install gh
     elif command_exists apt-get; then
         # Debian/Ubuntu
         write_status "Using apt to install GitHub CLI..."
@@ -253,6 +287,9 @@ main() {
     else
         write_success "Exists: $sentricPath"
     fi
+
+    # Ensure Git is present before attempting to clone.
+    ensure_git
 
     # Step 4: Clone or update workspace repository
     echo ""

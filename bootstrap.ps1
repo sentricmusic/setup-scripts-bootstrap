@@ -103,6 +103,21 @@ function Test-CommandExists {
     $null -ne (Get-Command $Command -ErrorAction SilentlyContinue)
 }
 
+function Install-Homebrew {
+    Write-Status "Installing Homebrew (this can take a few minutes)..."
+    $env:NONINTERACTIVE = "1"
+    # Official non-interactive installer.
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Make brew available in the current session (Apple Silicon vs Intel paths).
+    if (Test-Path "/opt/homebrew/bin/brew") {
+        $env:PATH = "/opt/homebrew/bin:" + $env:PATH
+    }
+    elseif (Test-Path "/usr/local/bin/brew") {
+        $env:PATH = "/usr/local/bin:" + $env:PATH
+    }
+}
+
 function Install-GitHubCLI {
     Write-Status "Installing GitHub CLI..."
 
@@ -121,12 +136,17 @@ function Install-GitHubCLI {
         }
     }
     else {
-        # macOS/Linux
+        # macOS/Linux — ensure Homebrew exists first, bootstrapping it when missing.
+        if (-not (Test-CommandExists "brew")) {
+            Write-Warning "Homebrew is not installed"
+            Install-Homebrew
+        }
+
         if (Test-CommandExists "brew") {
             brew install gh
         }
         else {
-            Write-ErrorMsg "Homebrew is not available. Please install GitHub CLI manually from https://cli.github.com/"
+            Write-ErrorMsg "Homebrew installation failed. Please install it from https://brew.sh and re-run."
             exit 1
         }
     }

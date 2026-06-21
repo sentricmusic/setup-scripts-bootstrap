@@ -21,11 +21,12 @@ curl -fsSL https://raw.githubusercontent.com/sentricmusic/setup-scripts-bootstra
 The bootstrap script will:
 
 1. **Prompt for base directory** - choose from suggested locations or enter custom path
-2. **Install GitHub CLI** - if not already installed
-3. **Authenticate with GitHub** - opens browser for secure login
-4. **Create directory structure** - sets up `<base>/sentric/` folder
-5. **Clone the platform repository** - to `<base>/sentric/platform`
-6. **Output the setup command** - run it to complete environment setup
+2. **Install the package manager** - bootstraps Homebrew on macOS (and Git) if missing; uses winget on Windows
+3. **Install GitHub CLI** - if not already installed
+4. **Authenticate with GitHub** - opens browser for secure login
+5. **Create directory structure** - sets up `<base>/sentric/` folder
+6. **Clone the workspace repository** - to `<base>/workspace`
+7. **Output the setup command** - run it to complete environment setup
 
 ## What Happens Next (The Setup Wizard)
 
@@ -74,7 +75,7 @@ chmod +x bootstrap.sh
 ## Requirements
 
 - **Windows**: Windows 10/11 with PowerShell 5.1+ and winget
-- **macOS**: macOS 10.15+ (Homebrew will be installed if needed)
+- **macOS**: macOS 10.15+ — Homebrew and Git are installed automatically if missing, so a clean machine needs nothing pre-installed
 - **Linux**: Debian/Ubuntu or Fedora/RHEL based distros
 
 ## Troubleshooting
