@@ -1,2 +1,7 @@
 # Branch-only scratch pad (see workspace docs/todo-convention.md)
 TODO.md
+
+# github-governance required scratch/temp/worktree entries (PLAT-2559)
+/temp/
+.worktrees/
+scratch/
